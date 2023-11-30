@@ -16,7 +16,7 @@ public final class WaterfallTrueCompositionalLayout {
         var items = [NSCollectionLayoutGroupCustomItem]()
         let itemProvider = LayoutBuilder(
             configuration: config,
-            collectionWidth: environment.container.contentSize.width
+            collectionWidth: environment.container.effectiveContentSize.width
         )
         for i in 0..<config.itemCountProvider() {
             let item = itemProvider.makeLayoutItem(for: i)
@@ -25,10 +25,10 @@ public final class WaterfallTrueCompositionalLayout {
         
         let groupLayoutSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(itemProvider.maxColumnHeight())
+            heightDimension: .absolute(itemProvider.contentHeight())
         )
         
-        let group = NSCollectionLayoutGroup.custom(layoutSize: groupLayoutSize) { _ in
+        let group = NSCollectionLayoutGroup.custom(layoutSize: groupLayoutSize) { environment in
             return items
         }
         

@@ -15,6 +15,7 @@ public extension WaterfallTrueCompositionalLayout {
         public let columnCount: Int
         public let interItemSpacing: CGFloat
         public let contentInsetsReference: UIContentInsetsReference
+        public let contentInsets: NSDirectionalEdgeInsets
         public let itemHeightProvider: ItemHeightProvider
         public let itemCountProvider: ItemCountProvider
         
@@ -28,12 +29,14 @@ public extension WaterfallTrueCompositionalLayout {
         public init(
             columnCount: Int = 2,
             interItemSpacing: CGFloat = 8,
+            contentInsets: NSDirectionalEdgeInsets = .zero,
             contentInsetsReference: UIContentInsetsReference = .automatic,
             itemCountProvider: @escaping ItemCountProvider,
             itemHeightProvider: @escaping ItemHeightProvider
         ) {
             self.columnCount = columnCount
             self.interItemSpacing = interItemSpacing
+            self.contentInsets = contentInsets
             self.contentInsetsReference = contentInsetsReference
             self.itemCountProvider = itemCountProvider
             self.itemHeightProvider = itemHeightProvider
