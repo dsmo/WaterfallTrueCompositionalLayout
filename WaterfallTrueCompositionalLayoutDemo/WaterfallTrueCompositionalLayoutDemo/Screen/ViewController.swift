@@ -36,10 +36,10 @@ final class ViewController: UICollectionViewController {
         navigationItem.leftBarButtonItem = editButton
         
         viewModel.layoutConfiguration.sink { [unowned self] configuration in
-            let layout = UICollectionViewCompositionalLayout { sectionIndex, enviroment in
+            let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
                 WaterfallTrueCompositionalLayout.makeLayoutSection(
                     config: configuration,
-                    enviroment: enviroment,
+                    environment: environment,
                     sectionIndex: sectionIndex
                 )
             }
