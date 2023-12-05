@@ -14,19 +14,16 @@ extension WaterfallTrueCompositionalLayout {
         private let itemHeightProvider: ItemHeightProvider
         private let interItemSpacing: CGFloat
         private let collectionWidth: CGFloat
-        private let contentInsets: UIEdgeInsets
         
         init(
             configuration: Configuration,
             collectionWidth: CGFloat
         ) {
-            let contentInsets = edgeInsets(for: configuration.contentInsets)
-            self.columnHeights = [CGFloat](repeating: contentInsets.top, count: configuration.columnCount)
+            self.columnHeights = [CGFloat](repeating: 0, count: configuration.columnCount)
             self.columnCount = CGFloat(configuration.columnCount)
             self.itemHeightProvider = configuration.itemHeightProvider
             self.interItemSpacing = configuration.interItemSpacing
             self.collectionWidth = collectionWidth
-            self.contentInsets = contentInsets
         }
         
         func makeLayoutItem(for row: Int) -> NSCollectionLayoutGroupCustomItem {
@@ -40,7 +37,7 @@ extension WaterfallTrueCompositionalLayout {
         }
         
         func contentHeight() -> CGFloat {
-            return maxColumnHeight() + contentInsets.bottom
+            return maxColumnHeight()
         }
     }
 }
@@ -48,7 +45,7 @@ extension WaterfallTrueCompositionalLayout {
 private extension WaterfallTrueCompositionalLayout.LayoutBuilder {
     private var columnWidth: CGFloat {
         let spacing = (columnCount - 1) * interItemSpacing
-        return (collectionWidth - contentInsets.left - contentInsets.right - spacing) / columnCount
+        return (collectionWidth - spacing) / columnCount
     }
     
     func frame(for row: Int) -> CGRect {
@@ -61,7 +58,7 @@ private extension WaterfallTrueCompositionalLayout.LayoutBuilder {
     
     private func itemOrigin(width: CGFloat) -> CGPoint {
         let y = columnHeights[columnIndex()].rounded()
-        let x = contentInsets.left + (width + interItemSpacing) * CGFloat(columnIndex())
+        let x = (width + interItemSpacing) * CGFloat(columnIndex())
         return CGPoint(x: x, y: y)
     }
     
@@ -71,23 +68,4 @@ private extension WaterfallTrueCompositionalLayout.LayoutBuilder {
             .min(by: { $0.element < $1.element })?
             .offset ?? 0
     }
-}
-
-fileprivate func edgeInsets(for directionalEdgeInsets: NSDirectionalEdgeInsets) -> UIEdgeInsets {
-    let direction = UIView.userInterfaceLayoutDirection(for: .unspecified)
-    let left, right: CGFloat
-    switch direction {
-    case .rightToLeft:
-        left = directionalEdgeInsets.trailing
-        right = directionalEdgeInsets.leading
-    default:
-        left = directionalEdgeInsets.leading
-        right = directionalEdgeInsets.trailing
-    }
-    return UIEdgeInsets(
-        top: directionalEdgeInsets.top,
-        left: left,
-        bottom: directionalEdgeInsets.bottom,
-        right: right
-    )
 }
